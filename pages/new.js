@@ -1,61 +1,175 @@
-import React from 'react';
-import {Button, Form , Container, Row , Col} from 'react-bootstrap';
+import React, { useState, useEffect} from "react";
+
+import { Button, Form, Container, Row, Col } from "react-bootstrap";
+import AlertMessage from "../components/alert";
+import Spinner from "react-bootstrap/Spinner";
 
 
 
-export default function AddProduct(){
+function MyFallbackComponent({error, resetErrorBoundary}) {
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <pre>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  )
+}
 
-    const handleSubmit = (e)=>{
+export default function AddProduct() {
+  const [data, setData] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
 
-e.preventDefault();
-        console.log(e.target.value)
+
+  useEffect(() => {
+    if (isSubmitting) {
+      if (Object.keys(errors).length === 0) {
+        addNew();
+      } else {
+        setIsSubmitting(false);
+      }
+    }
+  }, [errors]);
+
+  const addNew = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/items", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: data?.status
+          ? JSON.stringify(data)
+          : JSON.stringify({ ...data, status: "In-Stock" }),
+      });
+    } catch (error) {
+    console.log(error)
+    }
+  };
+
+  const updateData = (e) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let errs = validate();
+    setErrors(errs);
+    setIsSubmitting(true);
+  };
+
+  const validate = () => {
+    let err = {};
+
+    if (!data.name) {
+      err.name = "Name is required";
+    }
+    if (!data.description) {
+      err.description = "Description is required";
+    }
+    if (!data.price) {
+      err.price = "Price is required";
+    }
+    if (!data.quantity) {
+      err.quantity = "Quantity is required";
     }
 
+    return err;
+  };
 
-    return(
-        <Container style = {{padding: '10%'}}>
+  setTimeout(() => {
+    if (isSubmitting) {
+      setIsSubmitting(false);
+    }
+  }, 2000);
 
-
-        <Form onSubmit = {handleSubmit}>
+  return (
+    
+    <Container style={{ padding: "10%" }}>
+      <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-            <Row>
-                <Col>
-                <Form.Label>Product Name</Form.Label>
-          <Form.Control type="text" placeholder="Enter product name" />
+          <Form.Label>Product Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter product name"
+            onChange={updateData}
+            name="name"
+          />
           <Form.Text className="text-muted">
-           It is necesary to be unique
+            It is necesary to be unique
           </Form.Text>
-                </Col>
-            </Row>
-      
-        </Form.Group>
-  
-        <Form.Group className="mb-3"  >
-          <Form.Label>Description</Form.Label>
-          <Form.Control type="text" placeholder="Description"/>
         </Form.Group>
 
         <Form.Group className="mb-3">
-        <Row>
-            <Col> <Form.Label>Price</Form.Label>
-          <Form.Control type="number" placeholder="Price" />
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            type="text"
+            as="textarea"
+            placeholder="Description"
+            onChange={updateData}
+            name="description"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Row>
+            <Col className="col-sm-4 col-12">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Price"
+                onChange={updateData}
+                name="price"
+              />
             </Col>
 
-            <Col> <Form.Label>Quantity</Form.Label>
-          <Form.Control type="number" placeholder="Quantity" />
+            <Col className="col-sm-4 col-12">
+              <Form.Label>Quantity</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Quantity"
+                onChange={updateData}
+                name="quantity"
+              />
             </Col>
-            
-            <Col> <Form.Label>Status</Form.Label>
-          <Form.Control type="text" placeholder="Status" />
+
+            <Col className="col-sm-4 col-12">
+              <Form.Label>Status</Form.Label>
+              <Form.Select
+                aria-label="Default select example"
+                onChange={updateData}
+                name="status"
+              >
+                <option value="In-Stock">In-Stock</option>
+                <option value="Out-Stock">Out-Stock</option>
+                <option value="On order">On Order</option>
+              </Form.Select>
             </Col>
-        </Row>
+          </Row>
         </Form.Group>
+
         <Button variant="dark" type="submit">
-          Submit
+          {isSubmitting ? (
+            <Spinner
+              style={{ marginRight: 10 }}
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+          ) : null}
+          {isSubmitting ? "submitting" : "submit"}
         </Button>
       </Form>
-      </Container>
+    </Container>
 
 
-    )
+  );
 }

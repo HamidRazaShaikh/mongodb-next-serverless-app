@@ -4,14 +4,23 @@ import Navbar from "react-bootstrap/Navbar";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { FaSearch } from "react-icons/fa";
-import Link from "next/link";
+import { FiArrowLeft } from "react-icons/fi";
+import { useRouter } from "next/router";
 
 function NavbarComponent() {
+  let route = useRouter();
+
+  
+
+  
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container style={{ maxWidth: "100%" }}>
         <Navbar.Brand href="#home">Products Inventory</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" style = {{marginBottom:10}} />
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          style={{ marginBottom: 10 }}
+        />
         <Navbar.Collapse
           id="responsive-navbar-nav"
           style={{ justifyContent: "flex-end" }}
@@ -23,13 +32,21 @@ function NavbarComponent() {
               className="me-2"
               aria-label="Search"
             />
-            <Button variant = 'dark'><FaSearch/></Button>
+            <Button variant="dark">
+              <FaSearch />
+            </Button>
           </Form>
           <Nav>
-            <Nav.Link><Link href='/new' className = 'link'>Add Product</Link></Nav.Link>
-            <Nav.Link eventKey={2}>
-              Export 
-            </Nav.Link>
+            <Nav.Link href="/new">Add Product</Nav.Link>
+            {route?.asPath === "/" ? (
+              <Nav.Link eventKey={2} href="/">
+                Export
+              </Nav.Link>
+            ) : (
+              <Nav.Link eventKey={2} href="/">
+                <FiArrowLeft /> Back
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
