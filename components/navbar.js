@@ -13,17 +13,48 @@ function NavbarComponent() {
   const context = useContext(GlobalContext);
   const { addSearchTerm } = useContext(GlobalContext);
 
-  let route = useRouter();
+  const route = useRouter();
+  const {id} = route.query
 
   const handleChange = (e) => {
     e.preventDefault();
     addSearchTerm(e.target.value);
   };
 
+  const Title = (t) => {
+    switch (t) {
+      case "/":
+        return "Product Inventory";
+      break;
+
+      case "/new":
+        return "Add New Product";
+      break;
+
+      case `/${id}`:
+        return "Product Details";
+      break;
+
+      case `/${id}/edit`:
+        return "Edit Product";
+      break;
+
+    default:
+        return "Error";
+      break;
+
+    
+    }
+  };
+
+
+
+
+
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" style = {{position : 'fixed', width : '100%', top: 0}}>
       <Container style={{ maxWidth: "100%" }}>
-        <Navbar.Brand href="#home">Products Inventory</Navbar.Brand>
+        <Navbar.Brand href="#home">{Title(route?.asPath)}</Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
           style={{ marginBottom: 10 }}
@@ -32,20 +63,26 @@ function NavbarComponent() {
           id="responsive-navbar-nav"
           style={{ justifyContent: "flex-end" }}
         >
-          <Form className="d-flex mr-10">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-              onChange={handleChange}
-            />
-            <Button variant="dark">
-              <FaSearch />
-            </Button>
-          </Form>
+          {route?.asPath === "/" ? (
+            <Form className="d-flex mr-10">
+              <Form.Control
+                type="search"
+                placeholder="Search"
+                className="me-2"
+                aria-label="Search"
+                onChange={handleChange}
+              />
+              <Button variant="dark">
+                <FaSearch />
+              </Button>
+            </Form>
+          ) : null}
+
           <Nav>
-            <Nav.Link href="/new">Add Product</Nav.Link>
+            {route?.asPath === "/" ? (
+              <Nav.Link href="/new">Add Product</Nav.Link>
+            ) : null}
+
             {route?.asPath === "/" ? (
               <Nav.Link eventKey={2} href="/">
                 Export

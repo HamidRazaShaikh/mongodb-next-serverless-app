@@ -33,7 +33,7 @@ export default function AddProduct() {
 
   const addNew = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/items", {
+      const res = await fetch(`${process.env.BASE_URL}/api/items`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -68,9 +68,8 @@ export default function AddProduct() {
 
     let errs = validate();
     setErrors(errs);
-    setSubmitted(false)
+    setSubmitted(false);
     setIsSubmitting(true);
-
   };
 
   const validate = () => {
@@ -98,6 +97,8 @@ export default function AddProduct() {
     }
   }, 2000);
 
+  console.log(errors.name);
+
   return (
     <Container style={{ padding: "10%" }}>
       <Form onSubmit={handleSubmit}>
@@ -109,9 +110,14 @@ export default function AddProduct() {
             onChange={updateData}
             name="name"
           />
-          <Form.Text className="text-muted">
-            It is necesary to be unique
-          </Form.Text>
+
+          {errors?.name? (
+            <Form.Text style={{ color: "red" }}>{errors?.name}</Form.Text>
+          ) : (
+            <Form.Text className="text-muted">
+              It is necesary to be unique
+            </Form.Text>
+          )}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -123,6 +129,9 @@ export default function AddProduct() {
             onChange={updateData}
             name="description"
           />
+          {errors?.description? (
+            <Form.Text style={{ color: "red" }}>{errors?.description}</Form.Text>
+          ) : null }
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -135,6 +144,9 @@ export default function AddProduct() {
                 onChange={updateData}
                 name="price"
               />
+               {errors?.price? (
+            <Form.Text style={{ color: "red" }}>{errors?.price}</Form.Text>
+          ) : null }
             </Col>
 
             <Col className="col-sm-4 col-12">
@@ -145,6 +157,9 @@ export default function AddProduct() {
                 onChange={updateData}
                 name="quantity"
               />
+               {errors?.quantity? (
+            <Form.Text style={{ color: "red" }}>{errors?.quantity}</Form.Text>
+          ) : null }
             </Col>
 
             <Col className="col-sm-4 col-12">
@@ -180,7 +195,11 @@ export default function AddProduct() {
       {/* alert message */}
 
       {show && (
-        <AlertMessage show={show} onHide={() => setShow(false)} message = {{errorRes , submitted}} />
+        <AlertMessage
+          show={show}
+          onHide={() => setShow(false)}
+          message={{ errorRes, submitted }}
+        />
       )}
     </Container>
   );

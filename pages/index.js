@@ -2,13 +2,14 @@ import React, { useEffect, useState, useContext } from "react";
 import { Table, Container, Button } from "react-bootstrap";
 import { FaTrash, FaPen } from "react-icons/fa";
 import { GlobalContext } from "../context/globalState";
+import { useRouter } from "next/router";
 
 const Home = ({ items }) => {
   const [name, setName] = useState("");
   const { searchTerm } = useContext(GlobalContext);
   const [foundItems, setFoundItems] = useState(items);
 
-
+  const router = useRouter();
 
   useEffect(() => {
     filter();
@@ -31,7 +32,7 @@ const Home = ({ items }) => {
 
   return (
     <>
-      <Table striped bordered hover>
+      <Table striped bordered hover style = {{marginTop : 15}}>
         <thead>
           <tr>
             <th>S.NO</th>
@@ -47,7 +48,19 @@ const Home = ({ items }) => {
         <tbody>
           {foundItems &&
             foundItems?.map((item, i) => (
-              <tr key={i}>
+              <tr
+                key={i}
+                // onClick={() =>
+                //   router.push({
+                //     pathname: `/${item._id}`,
+                //     query: { id: item._id },
+                //   })
+                // }
+
+                onClick={() =>
+                  router.push(`/${item._id}`)
+                }
+              >
                 <td>{i + 1}</td>
                 <td className="name">{item.name} </td>
                 <td>{item.quantity}</td>
@@ -63,7 +76,7 @@ const Home = ({ items }) => {
 };
 
 Home.getInitialProps = async () => {
-  const res = await fetch("http://localhost:3000/api/items");
+  const res = await fetch(`${process.env.BASE_URL}/api/items`);
   const { data } = await res.json();
 
   return { items: data };
