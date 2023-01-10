@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -6,13 +7,19 @@ import Button from "react-bootstrap/Button";
 import { FaSearch } from "react-icons/fa";
 import { FiArrowLeft } from "react-icons/fi";
 import { useRouter } from "next/router";
+import { GlobalContext } from "../context/globalState";
 
 function NavbarComponent() {
+  const context = useContext(GlobalContext);
+  const { addSearchTerm } = useContext(GlobalContext);
+
   let route = useRouter();
 
-  
+  const handleChange = (e) => {
+    e.preventDefault();
+    addSearchTerm(e.target.value);
+  };
 
-  
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container style={{ maxWidth: "100%" }}>
@@ -31,6 +38,7 @@ function NavbarComponent() {
               placeholder="Search"
               className="me-2"
               aria-label="Search"
+              onChange={handleChange}
             />
             <Button variant="dark">
               <FaSearch />

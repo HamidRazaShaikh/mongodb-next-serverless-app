@@ -1,26 +1,25 @@
-import React, { useState, useEffect} from "react";
-
+import React, { useState, useEffect } from "react";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import AlertMessage from "../components/alert";
 import Spinner from "react-bootstrap/Spinner";
 
-
-
-function MyFallbackComponent({error, resetErrorBoundary}) {
+function MyFallbackComponent({ error, resetErrorBoundary }) {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
       <pre>{error.message}</pre>
       <button onClick={resetErrorBoundary}>Try again</button>
     </div>
-  )
+  );
 }
 
 export default function AddProduct() {
   const [data, setData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
-
+  const [show, setShow] = useState(false);
+  const [errorRes, setErrorRes] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (isSubmitting) {
@@ -44,8 +43,16 @@ export default function AddProduct() {
           ? JSON.stringify(data)
           : JSON.stringify({ ...data, status: "In-Stock" }),
       });
+
+      if (res.status === 400) {
+        setShow(true);
+        setErrorRes(res.statusText);
+      } else {
+        setShow(true);
+        setSubmitted(true);
+      }
     } catch (error) {
-    console.log(error)
+      console.log(error);
     }
   };
 
@@ -61,7 +68,9 @@ export default function AddProduct() {
 
     let errs = validate();
     setErrors(errs);
+    setSubmitted(false)
     setIsSubmitting(true);
+
   };
 
   const validate = () => {
@@ -90,7 +99,6 @@ export default function AddProduct() {
   }, 2000);
 
   return (
-    
     <Container style={{ padding: "10%" }}>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
@@ -168,8 +176,12 @@ export default function AddProduct() {
           {isSubmitting ? "submitting" : "submit"}
         </Button>
       </Form>
+
+      {/* alert message */}
+
+      {show && (
+        <AlertMessage show={show} onHide={() => setShow(false)} message = {{errorRes , submitted}} />
+      )}
     </Container>
-
-
   );
 }

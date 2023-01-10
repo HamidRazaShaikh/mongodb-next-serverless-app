@@ -16,3 +16,25 @@ body{
 
   color :inherit
 }
+
+th{
+
+  text-align: center !important;
+
+
+}
+
+
+td {
+
+  text-align: center !important;
+ 
+
+}
+
+.name {
+
+  text-align: start !important;
+ 
+
+}

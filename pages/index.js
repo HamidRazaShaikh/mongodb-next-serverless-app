@@ -1,32 +1,61 @@
-import React, { useEffect, useSate } from "react";
-
-import { Table, Container } from "react-bootstrap";
+import React, { useEffect, useState, useContext } from "react";
+import { Table, Container, Button } from "react-bootstrap";
+import { FaTrash, FaPen } from "react-icons/fa";
+import { GlobalContext } from "../context/globalState";
 
 const Home = ({ items }) => {
+  const [name, setName] = useState("");
+  const { searchTerm } = useContext(GlobalContext);
+  const [foundItems, setFoundItems] = useState(items);
+
+
+
+  useEffect(() => {
+    filter();
+  }, [searchTerm]);
+
+  // romote filter search term usage
+
+  const filter = () => {
+    if (searchTerm !== "") {
+      const results = items.filter((item) => {
+        return item?.name.toLowerCase().startsWith(searchTerm.toLowerCase());
+        // Use the toLowerCase() method to make it case-insensitive
+      });
+      setFoundItems(results);
+    } else {
+      setFoundItems(items);
+      // If the text field is empty, show all items
+    }
+  };
+
   return (
     <>
-      <Table striped bordered hover size="sm">
+      <Table striped bordered hover>
         <thead>
           <tr>
-            <th width={"5%"}>S.NO</th>
-            <th width={"50%"}>Product</th>
+            <th>S.NO</th>
+            <th width={"40%"} className="name">
+              Product
+            </th>
             <th>Qty.</th>
             <th>Price</th>
             <th>Status</th>
-            <th>Action</th>
+            {/* <th width = {'5%'} >Action</th> */}
           </tr>
         </thead>
         <tbody>
-          {items && items?.map((item, i) => (
-            <tr key={i}>
-              <td>{i + 1}</td>
-              <td>{item.name}</td>
-              <td>{item.quantity}</td>
-              <td>{item.price}</td>
-              <td>{item.status}</td>
-              <td>actions</td>
-            </tr>
-          ))}
+          {foundItems &&
+            foundItems?.map((item, i) => (
+              <tr key={i}>
+                <td>{i + 1}</td>
+                <td className="name">{item.name} </td>
+                <td>{item.quantity}</td>
+                <td>{item.price}</td>
+                <td>{item.status}</td>
+                {/* <td style = {{justifyContent: 'space-around', alignItems : 'center', display: 'flex'}}> <Button variant="light" ><FaPen size={10}/></Button><Button variant="light"><FaTrash size={10} color="red"/></Button></td> */}
+              </tr>
+            ))}
         </tbody>
       </Table>
     </>

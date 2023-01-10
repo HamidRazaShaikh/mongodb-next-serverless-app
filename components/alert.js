@@ -2,7 +2,13 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 function AlertMessage (props) {
-  let {error} = props;
+
+ let  {message:{errorRes, submitted}} = props;
+
+
+ console.log(errorRes, submitted)
+
+
  
   return (
     <Modal
@@ -13,16 +19,14 @@ function AlertMessage (props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-         {error === 'true' ? 'Error' : 'Success'}
+          {submitted? 'Success: 200' :  'Error:400 bad request'}
+     
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      {error === 'true' ? <p>
-         error occured, check input fields.
-        </p> : <p>
-         Data successfully saved.
-        </p>}
-       
+      {submitted? 'Data submitted successfully.' :  'Probably product name is repeated. It must be unique.'}
+     
+     
       </Modal.Body>
      
     </Modal>
