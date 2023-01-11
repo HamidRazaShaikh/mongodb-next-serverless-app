@@ -7,8 +7,6 @@ dbConnect();
 export default async (req, res) => {
   const { method } = req;
 
-
-
   switch (method) {
     case "GET":
       try {
@@ -19,7 +17,7 @@ export default async (req, res) => {
         console.log(error);
       }
 
-    break;
+      break;
 
     case "POST":
       try {
@@ -27,10 +25,12 @@ export default async (req, res) => {
         res.status(201).json({ success: true, data: data });
       } catch (error) {
         res.status(400).json({ success: false, error: error });
-        console.log(error)
+        console.log(error);
       }
 
-    break;
+      break;
+
+  
     default:
       res.status(400).json({ success: false, error: "Invalid request method" });
   }

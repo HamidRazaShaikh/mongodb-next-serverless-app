@@ -97,10 +97,8 @@ export default function AddProduct() {
     }
   }, 2000);
 
-  console.log(errors.name);
-
   return (
-    <Container style={{ padding: "10%" }}>
+    <Container style={{ padding: "10%", marginTop: '3.5rem' }}>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Product Name</Form.Label>

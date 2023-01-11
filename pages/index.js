@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 const Home = ({ items }) => {
   const [name, setName] = useState("");
   const { searchTerm } = useContext(GlobalContext);
+ 
   const [foundItems, setFoundItems] = useState(items);
 
   const router = useRouter();
@@ -20,19 +21,20 @@ const Home = ({ items }) => {
   const filter = () => {
     if (searchTerm !== "") {
       const results = items.filter((item) => {
-        return item?.name.toLowerCase().startsWith(searchTerm.toLowerCase());
+        return item?.name.toLowerCase().startsWith(searchTerm?.toLowerCase());
         // Use the toLowerCase() method to make it case-insensitive
       });
       setFoundItems(results);
     } else {
       setFoundItems(items);
+
       // If the text field is empty, show all items
     }
   };
 
   return (
     <>
-      <Table striped bordered hover style = {{marginTop : 15}}>
+      <Table striped bordered hover style={{ marginTop: "3.5rem" }}>
         <thead>
           <tr>
             <th>S.NO</th>
@@ -48,19 +50,7 @@ const Home = ({ items }) => {
         <tbody>
           {foundItems &&
             foundItems?.map((item, i) => (
-              <tr
-                key={i}
-                // onClick={() =>
-                //   router.push({
-                //     pathname: `/${item._id}`,
-                //     query: { id: item._id },
-                //   })
-                // }
-
-                onClick={() =>
-                  router.push(`/${item._id}`)
-                }
-              >
+              <tr key={i} onClick={() => router.push(`/${item._id}`)}>
                 <td>{i + 1}</td>
                 <td className="name">{item.name} </td>
                 <td>{item.quantity}</td>

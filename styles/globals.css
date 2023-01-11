@@ -1,57 +1,38 @@
-body{
-
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-
-
-.center{
-
-
+.center {
   display: flex;
   justify-content: center;
-  align-items: 'center';
+  align-items: center;
 }
 
 .start {
-
   display: flex;
   justify-content: center;
-  align-items: 'flex-start';
+  align-items: "flex-start";
 }
 
-
-.link{
-
+.link {
   text-decoration: none;
   color: inherit;
 }
 
-.link:hover{
-
-  color :inherit
+.link:hover {
+  color: inherit;
 }
 
-th{
-
+th {
   text-align: center !important;
-
-
 }
-
 
 td {
-
   text-align: center !important;
- 
-
 }
 
 .name {
-
   text-align: start !important;
- 
-
 }

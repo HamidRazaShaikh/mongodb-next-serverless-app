@@ -6,7 +6,7 @@ function AlertMessage (props) {
  let  {message:{errorRes, submitted}} = props;
 
 
- console.log(errorRes, submitted)
+
 
 
  
