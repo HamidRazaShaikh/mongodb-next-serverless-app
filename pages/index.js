@@ -6,11 +6,15 @@ import { useRouter } from "next/router";
 
 const Home = ({ items }) => {
   const [name, setName] = useState("");
-  const { searchTerm } = useContext(GlobalContext);
- 
+  const { searchTerm} = useContext(GlobalContext); 
   const [foundItems, setFoundItems] = useState(items);
-
+  const { setItems } = useContext(GlobalContext);
   const router = useRouter();
+
+  useEffect(()=>{
+
+    setItems(items)
+  }, [])
 
   useEffect(() => {
     filter();
@@ -31,6 +35,9 @@ const Home = ({ items }) => {
       // If the text field is empty, show all items
     }
   };
+
+
+
 
   return (
     <>
@@ -54,7 +61,7 @@ const Home = ({ items }) => {
                 <td>{i + 1}</td>
                 <td className="name">{item.name} </td>
                 <td>{item.quantity}</td>
-                <td>{item.price}</td>
+                <td>$ {item.price}</td>
                 <td>{item.status}</td>
                 {/* <td style = {{justifyContent: 'space-around', alignItems : 'center', display: 'flex'}}> <Button variant="light" ><FaPen size={10}/></Button><Button variant="light"><FaTrash size={10} color="red"/></Button></td> */}
               </tr>

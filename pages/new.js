@@ -2,16 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import AlertMessage from "../components/alert";
 import Spinner from "react-bootstrap/Spinner";
+import { useRouter } from "next/router";
 
-function MyFallbackComponent({ error, resetErrorBoundary }) {
-  return (
-    <div role="alert">
-      <p>Something went wrong:</p>
-      <pre>{error.message}</pre>
-      <button onClick={resetErrorBoundary}>Try again</button>
-    </div>
-  );
-}
 
 export default function AddProduct() {
   const [data, setData] = useState({});
@@ -20,11 +12,13 @@ export default function AddProduct() {
   const [show, setShow] = useState(false);
   const [errorRes, setErrorRes] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
     if (isSubmitting) {
       if (Object.keys(errors).length === 0) {
         addNew();
+       
       } else {
         setIsSubmitting(false);
       }
@@ -47,9 +41,13 @@ export default function AddProduct() {
       if (res.status === 400) {
         setShow(true);
         setErrorRes(res.statusText);
+      
+        
       } else {
         setShow(true);
         setSubmitted(true);
+        // router.push('/')
+       
       }
     } catch (error) {
       console.log(error);

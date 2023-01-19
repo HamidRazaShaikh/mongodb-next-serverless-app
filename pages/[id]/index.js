@@ -96,7 +96,11 @@ const Details = ({ Detail }) => {
         </Card.Header>
         <Card.Body>
           <Card.Title>{data?.name}</Card.Title>
-          <Card.Text style={{ color: "blue" }}>{data?.description}</Card.Text>
+          <Card.Text style={{ color: "blue", marginTop: '2rem'}}>{data?.description}</Card.Text>
+          <Card.Img variant="top" src="" />
+         
+          <Card.Text>Quantity : {data?.quantity}</Card.Text>
+          <Card.Text>Price : ${data?.price}</Card.Text>
         </Card.Body>
       </Card>
     </Container>

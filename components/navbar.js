@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -8,13 +8,16 @@ import { FaSearch } from "react-icons/fa";
 import { FiArrowLeft } from "react-icons/fi";
 import { useRouter } from "next/router";
 import { GlobalContext } from "../context/globalState";
+import exportToExcel from "../functions/export";
 
 function NavbarComponent() {
   const context = useContext(GlobalContext);
-  const { addSearchTerm } = useContext(GlobalContext);
-
+  const { addSearchTerm , items} = useContext(GlobalContext);
+  const JsonData = JSON.stringify(items)
+ 
   const route = useRouter();
-  const {id} = route.query
+  const {id} = route.query;
+
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -47,8 +50,7 @@ function NavbarComponent() {
     }
   };
 
-
-
+  exportToExcel(JsonData, 'file1')
 
 
   return (

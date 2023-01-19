@@ -3,6 +3,7 @@ import GlobalReducer from "./globalReducer";
 
 const initialState = {
   searchTerm: "",
+  items: []
 };
 
 export const GlobalContext = createContext(initialState);
@@ -17,14 +18,24 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
+  function setItems(items) {
+    dispatch({
+      type: "SET_ITEMS",
+      payload: items,
+    });
+  }
+
+
   
 
   return (
     <GlobalContext.Provider
       value={{
         searchTerm: state.searchTerm,
+        items : state.items,
 
         addSearchTerm,
+        setItems,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 const GlobalReducer = (state, action) => {
 
-  // console.log(action)
+ 
 
 
   switch (action.type) {
@@ -10,6 +10,14 @@ const GlobalReducer = (state, action) => {
         ...state,
         searchTerm: action.payload,
       }
+
+      case 'SET_ITEMS':
+      return {
+        ...state,
+        items : action.payload,
+      }
+
+    
 
     
    
