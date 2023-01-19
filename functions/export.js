@@ -1,23 +1,9 @@
-import * as FileSaver from 'file-saver';
-import XLSX from 'sheetjs-style';
+import * as FileSaver from "file-saver";
+import XLSX from "sheetjs-style";
 
-export default function exportToExcel (excelData, fileName){
-
-
-const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8';
-const fileExtension = '.xlsx';
-
-
-const ws = XLSX.utils.json_to_sheet(excelData);
-const wb = {sheet: {'data': ws , sheetNames: ['data']}};
-const excelBuffer = XLSX.write(wb ,  {bookType : '.xlsx', type : 'array'});
-const data = new Blob([excelBuffer], {type: fileType});
-FileSaver.saveAs(data, fileName + fileExtension)
-
-
-
-
-
-
-
+export default function exportToExcel(excelData) {
+  let wb = XLSX.utils.book_new();
+  let ws = XLSX.utils.json_to_sheet(excelData);
+  XLSX.utils.book_append_sheet(wb, ws, "excel-data");
+  XLSX.writeFile(wb, "myexcelfile.xlsx");
 }

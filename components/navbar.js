@@ -12,12 +12,30 @@ import exportToExcel from "../functions/export";
 
 function NavbarComponent() {
   const context = useContext(GlobalContext);
-  const { addSearchTerm , items} = useContext(GlobalContext);
-  const JsonData = JSON.stringify(items)
- 
-  const route = useRouter();
-  const {id} = route.query;
+  const { addSearchTerm, items } = useContext(GlobalContext);
 
+  // const excelData = () => {
+  //   let itemsData = [];
+  //   items.forEach((item) => {
+  //     const { ["_id"]: id , ...itemWithout_Id } = item;
+  //    itemsData.push(itemWithout_Id)
+  //   });
+
+  //   return itemsData
+
+  // };
+
+  const exportData = items && items.map((item, index) => {
+    return {
+      S_No : index + 1 ,
+      product_Name: item?.name,
+      Quantity: item?.quantity,
+      Price: item?.price,
+      DOMException: item?.domException,
+    };
+  });
+  const route = useRouter();
+  const { id } = route.query;
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -28,33 +46,36 @@ function NavbarComponent() {
     switch (t) {
       case "/":
         return "Product Inventory";
-      break;
+        break;
 
       case "/new":
         return "Add New Product";
-      break;
+        break;
 
       case `/${id}`:
         return "Product Details";
-      break;
+        break;
 
       case `/${id}/edit`:
         return "Edit Product";
-      break;
+        break;
 
-    default:
+      default:
         return "Error";
-      break;
-
-    
+        break;
     }
   };
 
-  exportToExcel(JsonData, 'file1')
-
+  console.log(exportData);
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" style = {{position : 'fixed', width : '100%', top: 0}}>
+    <Navbar
+      collapseOnSelect
+      expand="lg"
+      bg="dark"
+      variant="dark"
+      style={{ position: "fixed", width: "100%", top: 0 }}
+    >
       <Container style={{ maxWidth: "100%" }}>
         <Navbar.Brand href="#home">{Title(route?.asPath)}</Navbar.Brand>
         <Navbar.Toggle
@@ -86,7 +107,11 @@ function NavbarComponent() {
             ) : null}
 
             {route?.asPath === "/" ? (
-              <Nav.Link eventKey={2} href="/">
+              <Nav.Link
+                eventKey={2}
+                href="/"
+                onClick={() => exportToExcel(exportData)}
+              >
                 Export
               </Nav.Link>
             ) : (
