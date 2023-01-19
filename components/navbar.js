@@ -66,7 +66,7 @@ function NavbarComponent() {
     }
   };
 
-  console.log(exportData);
+
 
   return (
     <Navbar

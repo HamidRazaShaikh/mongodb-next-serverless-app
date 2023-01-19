@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Table, Container, Button } from "react-bootstrap";
 import { FaTrash, FaPen } from "react-icons/fa";
 import { GlobalContext } from "../context/globalState";
+
 import { useRouter } from "next/router";
 
 const Home = ({ items }) => {
